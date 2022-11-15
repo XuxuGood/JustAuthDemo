@@ -5,6 +5,7 @@ import com.xkcoding.http.config.HttpConfig;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.justauth.cache.AuthStateRedisCache;
 import me.zhyd.justauth.custom.AuthMyGitlabRequest;
+import me.zhyd.justauth.enums.scope.AuthGithubScope;
 import me.zhyd.justauth.service.UserService;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.enums.scope.*;
@@ -157,16 +158,16 @@ public class RestAuthController {
                         .build());
                 break;
             case "github":
-                authRequest = new AuthGithubRequest(AuthConfig.builder()
-                        .clientId("")
-                        .clientSecret("")
+                authRequest = new AuthGithubRequestNew(AuthConfig.builder()
+                        .clientId("10c20ba0c206fa4e787a")
+                        .clientSecret("2c4a60d06ffb58f20986e0c6823d7c0facd08d7d")
                         .redirectUri("http://localhost:8443/oauth/callback/github")
-                        .scopes(AuthScopeUtils.getScopes(AuthGithubScope.values()))
+                        .scopes(AuthScopeUtils.getScopes(AuthGithubScope.REPO, AuthGithubScope.ADMIN_REPO_HOOK, AuthGithubScope.USER))
                         // 针对国外平台配置代理
-                        .httpConfig(HttpConfig.builder()
-                                .timeout(15000)
-                                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 10080)))
-                                .build())
+//                        .httpConfig(HttpConfig.builder()
+//                                .timeout(15000)
+//                                .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 10080)))
+//                                .build())
                         .build(), stateRedisCache);
                 break;
             case "gitee":
