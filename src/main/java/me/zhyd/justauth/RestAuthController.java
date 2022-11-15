@@ -79,6 +79,7 @@ public class RestAuthController {
         if (response.ok()) {
             userService.save(response.getData());
 //            return new ModelAndView("redirect:/oauth/" + source + "/success");
+            // 重定向成功页面
             return new ModelAndView("redirect:/success");
         }
 
