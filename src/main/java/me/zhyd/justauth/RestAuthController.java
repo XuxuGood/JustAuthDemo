@@ -60,11 +60,17 @@ public class RestAuthController {
         response.sendRedirect(authorizeUrl);
     }
 
+    @RequestMapping("/{source}/success")
+    @ResponseBody
+    public void success(@PathVariable("source") String source){
+        System.out.println(source + " 平台认证成功！");
+    }
+
     /**
      * oauth平台中配置的授权回调地址，以本项目为例，在创建github授权应用时的回调地址应为：http://127.0.0.1:8443/oauth/callback/github
      */
     @RequestMapping("/callback/{source}")
-    public ModelAndView login(@PathVariable("source") String source, AuthCallback callback, HttpServletRequest request) {
+    public ModelAndView login(@PathVariable("source") String source, AuthCallback callback) {
         log.info("进入callback：" + source + " callback params：" + JSONObject.toJSONString(callback));
         AuthRequest authRequest = getAuthRequest(source);
         AuthResponse<AuthUser> response = authRequest.login(callback);
@@ -72,7 +78,8 @@ public class RestAuthController {
 
         if (response.ok()) {
             userService.save(response.getData());
-            return new ModelAndView("redirect:/users");
+//            return new ModelAndView("redirect:/oauth/" + source + "/success");
+            return new ModelAndView("redirect:/success");
         }
 
         Map<String, Object> map = new HashMap<>(1);
